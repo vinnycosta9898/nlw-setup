@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { FastifyInstance} from 'fastify'
 import { z } from 'zod';
 import { prisma } from "./lib/prisma"
@@ -13,10 +14,12 @@ export async function appRoutes(app : FastifyInstance){
         
         const { title, weekDays } = createHabityBody.parse(request.body)
 
+        const today = dayjs().startOf("day").toDate() // Zera as horas 
+
         await prisma.habit.create({
             data: {
                 title,
-                created_at: new Date(),
+                created_at: today,
                 weekDays: {
                    create: weekDays.map(weekDay => {
                         return{
@@ -26,5 +29,37 @@ export async function appRoutes(app : FastifyInstance){
                 }
             }
         })
+    })
+
+    app.get("/day", async (request) => {
+        const getDayParams = z.object({
+            date: z.coerce.date()
+        })
+
+        const { date } = getDayParams.parse(request.query)
+        
+        // Retorna o dia da semana de uma Data
+        const weekDay = dayjs(date).get("day") 
+
+        //Todos os hábitos possíveis
+        //hábitos que ja foram completados
+        // lte menor ou igual
+        const possibleHabits = await prisma.habit.findMany({
+            where:{
+                created_at:{
+                    lte: date
+                },
+                weekDays:{
+                    some:{
+                        week_day: weekDay
+                    }
+                } 
+            }
+        })
+
+        return {
+            possibleHabits
+        }
+
     })
 }

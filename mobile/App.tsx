@@ -9,6 +9,8 @@ import { useFonts,
 import { Loading } from './src/components/Loading';
 import { Home } from './src/screens/Home';
 
+import './src/lib/dayjs';
+
 export default function App() {
   const [fontsLoaded] = useFonts({
          Inter_400Regular, 

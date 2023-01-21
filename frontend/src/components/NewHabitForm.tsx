@@ -1,4 +1,8 @@
 import { Check } from 'phosphor-react'
+import * as CheckBox from '@radix-ui/react-checkbox'
+
+const availableWeekDays = ["Domingo", "Segunda-Feira", "Terça-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira", "Sábado"]
+
 
 export function NewHabitForm(){
     return(
@@ -24,6 +28,30 @@ export function NewHabitForm(){
             >
                 Qual a recorrência?
             </label>
+
+            <div className="flex flex-col gap-2 mt-3">
+                {
+                    availableWeekDays.map(weekDay => {
+                        return(
+                            <CheckBox.Root
+                                className="flex items-center gap-3 group"
+                                key={weekDay}
+                            >
+                                <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-zinc-900 border-2 border-zinc-800 group-data-[state=checked]:bg-green-500 group-data-[state=checked]:border-green-500">
+                                    <CheckBox.Indicator>
+                                        <Check size={20} className="text-white"/>
+                                    </CheckBox.Indicator>
+                                </div>
+
+                                <span className="text-white leading-tight">
+                                    {weekDay}
+                                </span>
+                            </CheckBox.Root>
+                        )
+                    })
+                }
+                
+            </div>
 
             <button 
                 type="submit"

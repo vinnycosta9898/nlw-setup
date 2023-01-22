@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import { Alert, View, Text, ScrollView} from "react-native"
 import { useNavigation } from "@react-navigation/native";
 

@@ -8,7 +8,7 @@ import { HabitDay, DAY_SIZE} from "../components/HabitDay"
 import { Loading } from "../components/Loading";
 
 import { api } from "../lib/axios";
-import { generateRangeDatesFromYearStart } from '../../utils/generate-range-between-dates';
+import { generateRangeDatesFromYearStart } from '../utils/generate-range-between-dates';
 import dayjs from "dayjs";
 
 const weekDays = ["D", "S", "T", "Q", "Q", "S", "S"]

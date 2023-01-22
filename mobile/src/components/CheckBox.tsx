@@ -12,6 +12,7 @@ export function CheckBox({ title, checked = false, ...rest} : Props){
         <TouchableOpacity
             activeOpacity={0.7}
             className="flex-row mb-2 items-center"
+            {...rest}
         >
         {
             checked ? 

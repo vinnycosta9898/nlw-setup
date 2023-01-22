@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 
 interface HabitsListProps{
     date: Date
+    onCompletedChange: (completed: number) => void
 }
 
 interface HabitsInfo{
@@ -17,7 +18,7 @@ interface HabitsInfo{
     completedHabits: string[]
 }
 
-export function HabitsList({ date } : HabitsListProps){
+export function HabitsList({ date, onCompletedChange } : HabitsListProps){
     const [habitsInfo, setHabitsInfo] = useState<HabitsInfo>()
     
     useEffect(() => {
@@ -30,6 +31,27 @@ export function HabitsList({ date } : HabitsListProps){
         })
     }, [])
 
+    async function handleToggleHabit(habitId: string){
+        const isHabitAlreadyComplete = habitsInfo!.completedHabits.includes(habitId)
+
+        await api.patch(`/habits/${habitId}/toggle`)
+
+        let completedHabits : string[] = []
+
+        if(isHabitAlreadyComplete){
+            completedHabits = habitsInfo!.completedHabits.filter(id => id !== habitId)            
+        }else{
+            completedHabits = [...habitsInfo!.completedHabits, habitId]
+        }
+
+        setHabitsInfo({
+            possibleHabits: habitsInfo!.possibleHabits,
+            completedHabits
+        })
+
+        onCompletedChange(completedHabits.length)
+    }
+
     const isDateInPast = dayjs(date).endOf("day").isBefore(new Date());
 
 
@@ -39,6 +61,7 @@ export function HabitsList({ date } : HabitsListProps){
                 return(
                     <CheckBox.Root
                         key={habit.id}
+                        onCheckedChange={() => handleToggleHabit(habit.id)}
                         checked={habitsInfo.completedHabits.includes(habit.id)}
                         disabled={isDateInPast}
                         className="flex items-center gap-3 group"

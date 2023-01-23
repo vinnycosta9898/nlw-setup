@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { Alert, View, Text, ScrollView} from "react-native"
-import { useNavigation } from "@react-navigation/native";
+import { useState, useCallback } from "react";
+import { Alert, View, Text, ScrollView, } from "react-native"
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 import { Header } from "../components/Header"
 import { HabitDay, DAY_SIZE} from "../components/HabitDay"
@@ -16,7 +16,7 @@ const minimumSummaryDatesSizes = 18 * 5
 const amountOfDaysToFill = minimumSummaryDatesSizes - datesFromYearStart.length
 
 type SummaryProps = {
-    id: String,
+    id: string,
     date: string;
     amount: number;
     completed: number;
@@ -32,7 +32,6 @@ export function Home(){
         try{
             setLoading(true)
             const response = await api.get("summary")
-            console.log(response.data)
             setSummary(response.data)
         }catch(err){
             Alert.alert("Error", "Não foi possivel carregar")
@@ -42,9 +41,9 @@ export function Home(){
         }
     }
 
-    useEffect(() => {
-        fetchData();
-    }, [])
+    useFocusEffect(useCallback(() => {
+        fetchData()
+    }, []))
 
     if(loading){
         return(
@@ -95,9 +94,7 @@ export function Home(){
                     }
 
                 {
-                    amountOfDaysToFill > 0 && Array.from({
-                        length: amountOfDaysToFill
-                    }).map((_, index) => (
+                    amountOfDaysToFill > 0 && Array.from({length: amountOfDaysToFill}).map((_, index) => (
                         <View
                             className="bg-zinc-900 rounded-lg border-2 m-1 border-zinc-800 opacity-40"
                             style={{width: DAY_SIZE, height:DAY_SIZE }}

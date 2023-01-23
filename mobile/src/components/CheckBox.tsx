@@ -1,5 +1,6 @@
 import { TouchableOpacity, TouchableOpacityProps, View, Text } from "react-native"
 import { Feather } from '@expo/vector-icons'
+
 import colors from "tailwindcss/colors"
 import Animated , { FlipInEasyX, ZoomOut } from 'react-native-reanimated';
 
@@ -8,7 +9,7 @@ interface Props extends TouchableOpacityProps{
     checked?: boolean;
 }
 
-export function CheckBox({ title, checked = false, ...rest} : Props){
+export function CheckBox({ title, checked=false, ...rest} : Props){
     return(
         <TouchableOpacity
             activeOpacity={0.7}
